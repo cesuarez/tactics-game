@@ -1,6 +1,8 @@
 var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, "Game Name");
 
 var GameState = {
+    init: function(){
+    },
     preload: function(){
         this.load.spritesheet("erza_idle", "assets/images/erza_idle.png", 90, 200);
         
@@ -19,7 +21,6 @@ var GameState = {
         this.erza.anchor.setTo(0.5);
         this.erza.animations.add('idle', [0,1,2,3,4], 6, true);
         this.erza.play('idle');
-
 
         // Sprite States
 
@@ -48,10 +49,11 @@ var GameState = {
                 this.sprite.setActiveState("horizontal") ;
             }
         }
-
+    },
+    update: function(){
     },
     render: function(){
-        //game.debug.cameraInfo(game.camera, 32, 32);
+        game.debug.spriteInfo(this.erza, 32, 32);
         game.debug.text("fps: " + game.time.fps, 2, 14);   
     }
 };
