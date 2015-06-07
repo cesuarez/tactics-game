@@ -44,7 +44,7 @@ var GameState = {
             if(game.input.keyboard.isDown(Phaser.Keyboard.DOWN)){
                 this.sprite.y += 4;
             }
-            if(game.input.keyboard.isDown(Phaser.Keyboard.SPACE)){
+            if(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
                 this.sprite.setActiveState("horizontal") ;
             }
         }
