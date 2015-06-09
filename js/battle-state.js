@@ -71,6 +71,13 @@ var BattleState = {
         game.load.image('tile', 'assets/images/grass_tile.png');
         //game.load.image('tile', 'assets/images/water_tile.png');
 
+        // Character Spritesheet
+        game.load.spritesheet('ash', 'assets/images/Ash.png', 100, 120);
+        
+        // Load audio
+        game.load.audio('battle_music', 'assets/audio/Trisection.mp3');
+        game.load.audio('tile_fx', 'assets/audio/Tile_select.wav');
+
         game.time.advancedTiming = true;
 
         // Add and enable the plug-in.
@@ -90,6 +97,22 @@ var BattleState = {
         this.background.width = game.width;
         this.background.height = game.height;
         
+        // Character
+        ash = game.add.sprite(200,200,'ash');
+        ash.anchor.setTo(0.5,0.5);
+        // character animations
+        ash.animations.add('stand_down', [0,1,2,3,4,5], 10, true);
+        ash.animations.add('stand_left', [6,7,8,9,10,11], 10, true);
+        ash.animations.add('walking_down', [12,13,14,15,16,17], 10, true);
+        ash.animations.add('walking_left', [18,19,20,21,22,23], 10, true);
+
+        ash.animations.add('attacking_down', [24,25,26,27], 10, true);
+        ash.animations.add('attacking_left', [30,31,32,33], 10, true);
+        ash.animations.add('taking_damage_down', [28,29], 4, true);
+        ash.animations.add('taking_damage_left', [34,35], 4, true);
+        
+        // Character animation play
+        ash.animations.play('stand_down');
 
         // Create a group for our tiles.
         this.isoGroup = game.add.group();
@@ -99,6 +122,21 @@ var BattleState = {
 
         // Provide a 3D position for the cursor
         this.cursorPos = new Phaser.Plugin.Isometric.Point3();
+
+        //Add sound fx
+        tile_fx = game.add.audio('tile_fx');
+
+
+        // Add the music
+        battle_music = game.add.audio('battle_music');
+        // Set the loop property in true
+        battle_music.loop = true
+        //  Play
+        battle_music.play();
+        // Another way to loop a Phaser.Sound
+        //battle_music.loopFull();
+
+        this.cursors = game.input.keyboard.createCursorKeys();
     },
 
     update: function () {
@@ -116,6 +154,8 @@ var BattleState = {
                 tile.selected = true;
                 tile.tint = 0x86bfda;
                 game.add.tween(tile).to({ isoZ: 7 }, 200, Phaser.Easing.Quadratic.InOut, true);
+                // Do a sound fx
+                tile_fx.play();
             }
             // If not, revert back to how it was.
             else if (tile.selected && !inBounds) {
@@ -124,10 +164,54 @@ var BattleState = {
                 game.add.tween(tile).to({ isoZ: 0 }, 200, Phaser.Easing.Quadratic.InOut, true);
             }
         });
+        // **************** Character update() 
+        // Para probar una cosa de las animaciones
+
+        if(this.cursors.left.isDown){
+            ash.animations.play('walking_down');
+            ash.scale.x = 1;
+
+        }else if(this.cursors.right.isDown){
+            ash.animations.play('walking_left');
+            ash.scale.x = -1;
+
+        }else if(this.cursors.up.isDown){
+            ash.animations.play('walking_left');
+            ash.scale.x = 1;
+
+        }else if(this.cursors.down.isDown){
+            ash.animations.play('walking_down');
+            ash.scale.x = -1;
+
+        }else{
+            //ash.animations.play('stand_down');
+        }
+
+        if(game.input.keyboard.addKey(Phaser.Keyboard.FIVE).isDown){
+            ash.animations.play('stand_down');
+        }
+        if(game.input.keyboard.addKey(Phaser.Keyboard.SIX).isDown){
+            ash.animations.play('stand_left');
+        }
+        if(game.input.keyboard.addKey(Phaser.Keyboard.ONE).isDown){
+            ash.animations.play('attacking_down');
+        }
+        if(game.input.keyboard.addKey(Phaser.Keyboard.TWO).isDown){
+            ash.animations.play('attacking_left');
+        }
+        if(game.input.keyboard.addKey(Phaser.Keyboard.THREE).isDown){
+            ash.animations.play('taking_damage_down');
+        }
+        if(game.input.keyboard.addKey(Phaser.Keyboard.FOUR).isDown){
+            ash.animations.play('taking_damage_left');
+        }
+
+        // **************** END
     },
 
     render: function () {
         game.debug.text(game.time.fps || '--', 2, 14, "#a7aebe");
+        game.debug.soundInfo(battle_music, 20, 32);
     },
 
     spawnTiles: function () {
