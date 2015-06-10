@@ -123,20 +123,14 @@ var BattleState = {
         // Provide a 3D position for the cursor
         this.cursorPos = new Phaser.Plugin.Isometric.Point3();
 
-        //Add sound fx
         tile_fx = game.add.audio('tile_fx');
 
 
-        // Add the music
         battle_music = game.add.audio('battle_music');
-        // Set the loop property in true
         battle_music.loop = true
-        //  Play
-        battle_music.play();
+        //battle_music.play();
         // Another way to loop a Phaser.Sound
         //battle_music.loopFull();
-
-        this.cursors = game.input.keyboard.createCursorKeys();
     },
 
     update: function () {
@@ -167,42 +161,42 @@ var BattleState = {
         // **************** Character update() 
         // Para probar una cosa de las animaciones
 
-        if(this.cursors.left.isDown){
+        if(game.input.keyboard.isDown(Phaser.Keyboard.LEFT)){
             ash.animations.play('walking_down');
             ash.scale.x = 1;
 
-        }else if(this.cursors.right.isDown){
+        }else if(game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)){
             ash.animations.play('walking_left');
             ash.scale.x = -1;
 
-        }else if(this.cursors.up.isDown){
+        }else if(game.input.keyboard.isDown(Phaser.Keyboard.UP)){
             ash.animations.play('walking_left');
             ash.scale.x = 1;
 
-        }else if(this.cursors.down.isDown){
+        }else if(game.input.keyboard.isDown(Phaser.Keyboard.DOWN)){
             ash.animations.play('walking_down');
             ash.scale.x = -1;
 
         }else{
-            //ash.animations.play('stand_down');
-        }
-
-        if(game.input.keyboard.addKey(Phaser.Keyboard.FIVE).isDown){
             ash.animations.play('stand_down');
         }
-        if(game.input.keyboard.addKey(Phaser.Keyboard.SIX).isDown){
+
+        if(game.input.keyboard.isDown(Phaser.Keyboard.FIVE)){
+            ash.animations.play('stand_down');
+        }
+        if(game.input.keyboard.isDown(Phaser.Keyboard.SIX)){
             ash.animations.play('stand_left');
         }
-        if(game.input.keyboard.addKey(Phaser.Keyboard.ONE).isDown){
+        if(game.input.keyboard.isDown(Phaser.Keyboard.ONE)){
             ash.animations.play('attacking_down');
         }
-        if(game.input.keyboard.addKey(Phaser.Keyboard.TWO).isDown){
+        if(game.input.keyboard.isDown(Phaser.Keyboard.TWO)){
             ash.animations.play('attacking_left');
         }
-        if(game.input.keyboard.addKey(Phaser.Keyboard.THREE).isDown){
+        if(game.input.keyboard.isDown(Phaser.Keyboard.THREE)){
             ash.animations.play('taking_damage_down');
         }
-        if(game.input.keyboard.addKey(Phaser.Keyboard.FOUR).isDown){
+        if(game.input.keyboard.isDown(Phaser.Keyboard.FOUR)){
             ash.animations.play('taking_damage_left');
         }
 

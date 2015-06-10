@@ -1,6 +1,24 @@
-function SpriteState(name, fun) {
+
+/////////////////////////////
+// Sprite States Class
+/////////////////////////////
+
+function SpriteState(name, updateFun, keyEvents) {
 	this.name = name;
-    this.update = fun;
+    this.update = updateFun;
+    this.keyEvents = keyEvents;
+    
+    this.addKeyEvent = function(keyCode, eventFun){
+    	this.keyEvents[keyCode] = eventFun;
+    };
+
+    this.checkKeyEvents = function(){
+    	this.keyEvents.keys.forEach(function(keyCode){
+    		if(game.input.keyboard.isDown(keyCode)){
+    			this.keyEvents[keyCode]();
+    		}
+    	});
+    };
 };
 
 Phaser.Sprite.prototype.states = {};
@@ -22,6 +40,10 @@ Phaser.Sprite.prototype.removeState = function(name){
 	delete this.states[name];
 };
 Phaser.Sprite.prototype.update = function(){
-	if (this.state) {this.state.update();}
+	if (this.state) {
+		this.state.checkKeyEvents();
+		this.state.update();
+	}
 };
+
 
