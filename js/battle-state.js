@@ -1,8 +1,6 @@
 
 var BattleState = {
     init: function(){
-        delete game.input.keyboard.onDownCallback;
-        delete game.input.keyboard.onUpCallback;
     },
     preload: function(){
         this.load.spritesheet("erza_idle", "assets/images/erza_idle.png", 90, 200);
@@ -33,6 +31,7 @@ var BattleState = {
 
         function horizontalKeysEvents(){
             var keyEvents = {};
+
             keyEvents[Phaser.Keyboard.RIGHT] = function(sprite){
                 sprite.x += 4;
             };

@@ -1,36 +1,43 @@
+function createHCGame(width, height, renderer, parent, state, transparent, antialias, physicsConfig){
+	var phaserGame = new Phaser.Game(width, height, renderer, parent, state, transparent, antialias, physicsConfig);
+	
+	var oldKeyboard = Phaser.Keyboard;
+	var keyboard = new Phaser.Keyboard(phaserGame);
+	Phaser.Keyboard = function(game){
+		keyboard.pressedKeys = {};
+		keyboard.onDownCallback = function(event){
+			if (!this.pressedKeys[event.keyCode]){
+				this.pressedKeys[event.keyCode] = event.keyIdentifier;
+				console.log(this.pressedKeys);
+			}
+		};
+		keyboard.onUpCallback = function(event){
+			delete this.pressedKeys[event.keyCode]
+			console.log(this.pressedKeys);
+		};
+
+		return keyboard;
+	}
+
+	Object.keys(oldKeyboard).forEach(function(prop){
+		Phaser.Keyboard[prop] = oldKeyboard[prop];
+	});
+	
+	return phaserGame;
+}
+
 
 /////////////////////////////
 // Sprite States Class
 /////////////////////////////
 
 
-/*
-function createHCGame(width, height, renderer, parent, state, transparent, antialias, physicsConfig){
-	var game = new Phaser.Game(width, height, renderer, parent, state, transparent, antialias, physicsConfig);
-	
-	Phaser.Keyboard.prototype = new HCKeyboard(game);
-	//Phaser.Keyboard.prototype.constructor = HCKeyboard;
-	return game;
-}
-*/
-
-// Pressed Keys stored to check events in Sprite States
-Phaser.Keyboard.prototype.pressedKeys = {};
-Phaser.Keyboard.prototype.onDownCallback = function(event){
-	if (!this.pressedKeys[event.keyCode]){
-		this.pressedKeys[event.keyCode] = event.keyIdentifier;
-	}
-};
-Phaser.Keyboard.prototype.onUpCallback = function(event){
-	delete this.pressedKeys[event.keyCode]
-};
-
-
 function SpriteState(name, updateFun, keyEvents) {
 	this.name = name;
     this.update = updateFun;
     this.keyEvents = keyEvents ? keyEvents : {};
-    
+
+
     this.addKeyEvent = function(keyCode, eventFun){
     	this.keyEvents[keyCode] = eventFun;
     };
