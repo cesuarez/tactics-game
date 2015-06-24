@@ -3,8 +3,9 @@ var BattleState = {
     init: function(){
     },
     preload: function(){
-        this.load.spritesheet("erza_idle", "assets/images/erza_idle.png", 90, 200);
-        
+        //this.load.spritesheet("erza_idle", "assets/images/erza_idle.png", 90, 200);
+        this.load.atlasJSONHash('erza_idle', 'assets/images/erza_idle.png', 'assets/json/erza_idle.json');
+        //game.load.atlasJSONHash('bot', 'assets/images/running_bot.png', 'assets/json/running_bot.json');
     },
     create: function(){
         // Para evitar la propagación de una Key hacia el browser
@@ -16,20 +17,30 @@ var BattleState = {
         game.scale.fullScreenScaleMode = Phaser.ScaleManager.NO_SCALE;
         game.scale.pageAlignVertically = true;
         
-
         this.charsGroup = game.add.group();
+
+
+
+        /*
+        this.bot = this.charsGroup.create(game.world.centerX, game.world.centerY, 'bot');
+        this.bot.animations.add('run');
+        this.bot.animations.play('run', 15, true);
+        */
+              
         this.erza = this.charsGroup.create(game.world.centerX, game.world.centerY, "erza_idle");
         this.erza.name = "Erza Scarlet";
         this.erza.anchor.setTo(0.5);
-        this.erza.animations.add('idle', [0,1,2,3,4], 6, true);
-        this.erza.play('idle');
+        this.erza.animations.add('erza_idle', null, 6, true);
+        this.erza.play('erza_idle');
+        //this.erza.play('idle');
+        
 
 
         // Sprite States
+        
+        this.erza.addState(new SpriteState("horizontal", function (){}, botKeyEvents()), true);
 
-        this.erza.addState(new SpriteState("horizontal", function (){}, horizontalKeysEvents()), true);
-
-        function horizontalKeysEvents(){
+        function botKeyEvents(){
             var keyEvents = {};
 
             keyEvents[Phaser.Keyboard.RIGHT] = function(sprite){
@@ -38,28 +49,15 @@ var BattleState = {
             keyEvents[Phaser.Keyboard.UP] = function(sprite){
                 sprite.y += -4;
             };
-            keyEvents[Phaser.Keyboard.ENTER] = function(sprite){
-                sprite.setActiveState("vertical");
-            };
-            return keyEvents;
-        }
-
-
-        this.erza.addState(new SpriteState("vertical", function (){}, verticalKeysEvents()));
-
-        function verticalKeysEvents(){
-            var keyEvents = {};
             keyEvents[Phaser.Keyboard.LEFT] = function(sprite){
                 sprite.x += -4;
             };
             keyEvents[Phaser.Keyboard.DOWN] = function(sprite){
                 sprite.y += 4;
             };
-            keyEvents[Phaser.Keyboard.SPACEBAR] = function(sprite){
-                sprite.setActiveState("horizontal") ;
-            };
             return keyEvents;
         }
+
     },
     update: function(){
     },

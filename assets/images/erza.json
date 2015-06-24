@@ -1,0 +1,11 @@
+{"frames":{
+
+"erza_idle.png":
+{
+	"frame":{"x":0,"y":0,"w":450,"h":200},
+	"rotated":false,
+	"trimmed":false,
+	"spriteSourceSize":{"x":0,"y":0,"w":450,"y":200},
+	"sourceSize":{"w":450,"h":200}
+}
+}}

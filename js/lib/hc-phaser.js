@@ -8,12 +8,10 @@ function createHCGame(width, height, renderer, parent, state, transparent, antia
 		keyboard.onDownCallback = function(event){
 			if (!this.pressedKeys[event.keyCode]){
 				this.pressedKeys[event.keyCode] = event.keyIdentifier;
-				console.log(this.pressedKeys);
 			}
 		};
 		keyboard.onUpCallback = function(event){
 			delete this.pressedKeys[event.keyCode]
-			console.log(this.pressedKeys);
 		};
 
 		return keyboard;
