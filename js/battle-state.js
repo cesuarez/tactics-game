@@ -6,11 +6,19 @@ var BattleState = {
         //this.load.spritesheet("erza_idle", "assets/images/erza_idle.png", 90, 200);
         this.load.atlasJSONHash('erza_idle', 'assets/images/erza_idle.png', 'assets/json/erza_idle.json');
         //game.load.atlasJSONHash('bot', 'assets/images/running_bot.png', 'assets/json/running_bot.json');
+
+        this.load.image('green_diamond', 'assets/images/green_diamond.png');
+        this.load.image('window_back', 'assets/images/window_back.png');
     },
     create: function(){
         // Para evitar la propagación de una Key hacia el browser
-        //game.input.keyboard.addKeyCapture(keyCode)
-
+        game.input.keyboard.addKeyCapture([
+            Phaser.Keyboard.SPACEBAR,
+            Phaser.Keyboard.UP,
+            Phaser.Keyboard.DOWN,
+            Phaser.Keyboard.LEFT,
+            Phaser.Keyboard.RIGHT
+        ]);
 
         game.time.advancedTiming = true;
         game.stage.backgroundColor = '#182d3b';
@@ -18,29 +26,35 @@ var BattleState = {
         game.scale.pageAlignVertically = true;
         
         this.charsGroup = game.add.group();
-
-
+        this.windowGroup = game.add.group();
 
         /*
         this.bot = this.charsGroup.create(game.world.centerX, game.world.centerY, 'bot');
         this.bot.animations.add('run');
         this.bot.animations.play('run', 15, true);
         */
-              
-        this.erza = this.charsGroup.create(game.world.centerX, game.world.centerY, "erza_idle");
+
+        this.mainMenu = new Window(game, 400, 70, 500, 500, "window_back", this.windowGroup, VERTICAL_ARRANGE, true);
+        this.mainMenu.arrangement = new HORIZONTAL_ARRANGE();
+
+        this.mainMenu.addVerticalListComponent();
+        //this.mainMenu.addImageComponent("green_diamond", START_ALIGN);//, 0, 20);
+        //this.mainMenu.addImageComponent("green_diamond", CENTER_ALIGN);//, 0, 20);
+        //this.mainMenu.addImageComponent("green_diamond", END_ALIGN);//, 20, 100);
+
+        /*
+        this.erza = this.charsGroup.create(200, game.world.centerY, "erza_idle");
         this.erza.name = "Erza Scarlet";
         this.erza.anchor.setTo(0.5);
         this.erza.animations.add('erza_idle', null, 6, true);
         this.erza.play('erza_idle');
-        //this.erza.play('idle');
-        
 
 
         // Sprite States
         
-        this.erza.addState(new SpriteState("horizontal", function (){}, botKeyEvents()), true);
+        this.erza.addState("idle", null, erzaIdleKeyEvents(), true);
 
-        function botKeyEvents(){
+        function erzaIdleKeyEvents(){
             var keyEvents = {};
 
             keyEvents[Phaser.Keyboard.RIGHT] = function(sprite){
@@ -57,12 +71,13 @@ var BattleState = {
             };
             return keyEvents;
         }
+        */
 
     },
     update: function(){
     },
     render: function(){
-        game.debug.spriteInfo(this.erza, 32, 32);
+        //game.debug.spriteInfo(this.erza, 32, 32);
         game.debug.text(game.time.fps, 2, 14);   
     }
 };
