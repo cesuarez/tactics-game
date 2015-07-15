@@ -34,11 +34,19 @@ var BattleState = {
         this.bot.animations.play('run', 15, true);
         */
 
-        this.mainMenu = new Window(game, 400, 70, 500, 500, "window_back", this.windowGroup, VERTICAL_ARRANGE, true);
-        this.mainMenu.arrangement = new HORIZONTAL_ARRANGE();
+        this.mainMenu = new Window(game, 400, 70, 500, 500, 
+            "window_back", this.windowGroup, new VERTICAL_ARRANGE(), true);
 
-        this.mainMenu.addVerticalListComponent();
-        //this.mainMenu.addImageComponent("green_diamond", START_ALIGN);//, 0, 20);
+        var compList = [
+            new Phaser.Image(game, 0, 0, "green_diamond"), 
+            new Phaser.Image(game, 0, 0, "green_diamond"), 
+            new Phaser.Image(game, 0, 0, "green_diamond"), 
+            new Phaser.Image(game, 0, 0, "green_diamond"), 
+            new Phaser.Image(game, 0, 0, "green_diamond")
+        ]
+
+        this.list = this.mainMenu.addVerticalListComponent(compList);
+        this.mainMenu.addImageComponent("green_diamond", START_ALIGN);//, 0, 20);
         //this.mainMenu.addImageComponent("green_diamond", CENTER_ALIGN);//, 0, 20);
         //this.mainMenu.addImageComponent("green_diamond", END_ALIGN);//, 20, 100);
 
@@ -77,7 +85,7 @@ var BattleState = {
     update: function(){
     },
     render: function(){
-        //game.debug.spriteInfo(this.erza, 32, 32);
+        game.debug.spriteInfo(this.list.children[0], 32, 32);
         game.debug.text(game.time.fps, 2, 14);   
     }
 };

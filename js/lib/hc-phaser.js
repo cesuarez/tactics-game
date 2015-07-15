@@ -30,9 +30,11 @@ function createHCGame(width, height, renderer, parent, state, transparent, antia
 /////////////////////////////
 
 
-function Window(game, x, y, width, height, texture, group, draggable){
+function Window(game, x, y, width, height, texture, group, arrangement, draggable){
     this.game = game;
     
+    this.arrangement = arrangement;
+
     // Borders Spaces
     this.horizontalBorderSpace = 30;
     this.verticalBorderSpace = 30;
@@ -95,15 +97,15 @@ function Window(game, x, y, width, height, texture, group, draggable){
         return spriteComp;
     };
 
-    this.addVerticalListComponent = function (align, col, row){
+    this.addVerticalListComponent = function (compList, align, col, row){
         var listBack = this.game.make.bitmapData(this.getUsableWidth(), this.getUsableHeight() - 100);
-        listBack.fill(0, 0, 0);
+        //listBack.fill(0, 0, 0);
         var listComp = new WindowList(this.game, listBack, this.getAlignment(align));
-        listComp.alpha = 0.2;
+        //listComp.alpha = 0.2;
         this._addComponent(listComp, col, row);
 
         // Lo inicializo despues de tener el Anchor seteado
-        listComp.initChildren();
+        listComp.initVerticalChildren(compList);
 
         return listComp;
     };
@@ -178,17 +180,58 @@ function WindowList(game, bitmapData, align) {
     Phaser.Image.call(this, game, 0, 0, bitmapData);
     this.alignment = align;
 
-    this.initChildren = function(){
-        var scrollBitmapData = this.game.make.bitmapData(12, this.height - 40);
-        scrollBitmapData.fill(0, 0, 0);
-        var scrollX = this.width - 20;
-        var scrollY = 20 - this.height * this.anchor.y;
+    this.initVerticalChildren = function(compList){
+        this.addVerticalCompList(compList);
+        this.addVerticalScrollBar();
+    };
+
+    this.addVerticalCompList = function(compList){
+        var backBitmapData = this.game.make.bitmapData(this.width - 30, this.height);
+        backBitmapData.fill(40, 40, 40);
+        var backX = -this.getXOffset();
+        var backy = -this.getYOffset();
+        this.back = new Phaser.Image(this.game, backX, backy, backBitmapData);
+
+        var compsMaxHeight = maxHeight(compList) + 7;
+        var heightAccu = 0
+        var that = this;
+        compList.forEach(function(component){
+            var compBitmapData = that.game.make.bitmapData(that.back.width, compsMaxHeight);
+            compBitmapData.fill(0, 0, 40);
+            var compX = 0;
+            var compY = heightAccu;
+            var compBack = new Phaser.Image(that.game, compX, compY, compBitmapData);
+            that.back.addChild(compBack);
+
+            compBack.addChild(component);
+
+            heightAccu += compsMaxHeight;
+        });
+        this.addChild(this.back);
+    };
+
+    this.addVerticalScrollBar = function(){
+        var scrollBitmapData = this.game.make.bitmapData(12, this.height);
+        scrollBitmapData.fill(30, 30, 30);
+        var scrollX = this.width - 20 - this.getXOffset();
+        var scrollY = -this.getYOffset();
         this.scrollbar = new Phaser.Image(this.game, scrollX, scrollY, scrollBitmapData);
         this.addChild(this.scrollbar);
-    }
+    };
 }
 WindowList.prototype = Object.create(Phaser.Image.prototype);
 WindowList.prototype.constructor = WindowList;
+
+
+
+
+// Offsets
+PIXI.Sprite.prototype.getXOffset = function(){
+    return this.width * this.anchor.x;
+}
+PIXI.Sprite.prototype.getYOffset = function(){
+    return this.height * this.anchor.y;
+}
 
 
 /////////////////////////////

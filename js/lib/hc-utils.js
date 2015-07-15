@@ -8,3 +8,11 @@ function inspectObject(o,i){
     }
     return r.join(i+'\n');
 }
+
+function maxHeight(list){
+	var max = 0;
+	list.forEach(function(elem){
+		if (elem.height > max) max = elem.height; 
+	});
+	return max;
+}
