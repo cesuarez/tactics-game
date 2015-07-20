@@ -235,20 +235,44 @@ function WindowList(game, bitmapData, align) {
     };
 
     this.addVerticalScrollBar = function(){
-        
-        
+        //Scroll Bar
         var scrollBitmapData = this.game.make.bitmapData(15, this.height);
         scrollBitmapData.fill(30, 30, 30);
         var scrollX = this.width - 15 - this.getXOffset();
         var scrollY = -this.getYOffset();
         this.scrollbar = new Phaser.Image(this.game, scrollX, scrollY, scrollBitmapData);
         this.addChild(this.scrollbar);
+
+
+        // Scroller
+        var scrollerbitmapData = this.game.make.bitmapData(this.scrollbar.width, 1);
+        scrollerbitmapData.fill(70, 70, 70);
+        this.scroller = new Phaser.Image(this.game, 0, 0, scrollerbitmapData);
+        this.updateScrollerHeight();
+
+        // Drag and Inputs
+        this.scroller.inputEnabled = true;
+        this.scroller.input.priorityID = this.input.priorityID + 1;
+        this.scroller.input.allowHorizontalDrag = false;
+        this.scroller.input.enableDrag();
+
+        this.scroller.input.boundsRect = new Phaser.Rectangle(
+            0, 0, this.scrollbar.width, this.scrollbar.height
+        );
+
+        this.scrollbar.addChild(this.scroller);
     };
+
+    this.updateScrollerHeight = function(){
+        this.scroller.height = this.back.height / this.getListHeight() * this.scrollbar.height;
+        if (this.scroller.height > this.scrollbar.height){
+            this.scroller.height = this.scrollbar.height;
+        }
+    }
 
     this.getListHeight = function(){
         return this.back.children.length * this.compsMaxHeight;
-    }
-
+    };
     
     this.updateHitArea = function(){
         this.back.hitArea = new Phaser.Rectangle(
