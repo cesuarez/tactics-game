@@ -42,11 +42,15 @@ var BattleState = {
             new Phaser.Image(game, 0, 0, "green_diamond"), 
             new Phaser.Image(game, 0, 0, "green_diamond"), 
             new Phaser.Image(game, 0, 0, "green_diamond"), 
+            new Phaser.Image(game, 0, 0, "green_diamond"), 
+            new Phaser.Image(game, 0, 0, "green_diamond"), 
+            new Phaser.Image(game, 0, 0, "green_diamond"), 
+            new Phaser.Image(game, 0, 0, "green_diamond"), 
             new Phaser.Image(game, 0, 0, "green_diamond")
         ]
 
         this.list = this.mainMenu.addVerticalListComponent(compList);
-        this.mainMenu.addImageComponent("green_diamond", START_ALIGN);//, 0, 20);
+        //this.mainMenu.addImageComponent("green_diamond", START_ALIGN);//, 0, 20);
         //this.mainMenu.addImageComponent("green_diamond", CENTER_ALIGN);//, 0, 20);
         //this.mainMenu.addImageComponent("green_diamond", END_ALIGN);//, 20, 100);
 

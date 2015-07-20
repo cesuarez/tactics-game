@@ -187,17 +187,25 @@ function WindowList(game, bitmapData, align) {
 
     this.addVerticalCompList = function(compList){
         var backBitmapData = this.game.make.bitmapData(this.width - 30, this.height);
-        backBitmapData.fill(40, 40, 40);
+        //backBitmapData.fill(40, 40, 40);
         var backX = -this.getXOffset();
         var backy = -this.getYOffset();
         this.back = new Phaser.Image(this.game, backX, backy, backBitmapData);
+        this.backMask = this.game.make.graphics(-this.getXOffset(), -this.getYOffset());
+        this.backMask.beginFill(0x000000);
+        this.backMask.drawRect(0, 0, this.back.width, this.back.height);
+        this.back.mask = this.backMask;
 
-        var compsMaxHeight = maxHeight(compList) + 7;
-        var heightAccu = 0
+        this.addChild(this.back);
+        this.addChild(this.backMask);
+
+        // Add Components
+        this.compsMaxHeight = maxHeight(compList) + 8;
+        var heightAccu = 0;
         var that = this;
         compList.forEach(function(component){
-            var compBitmapData = that.game.make.bitmapData(that.back.width, compsMaxHeight);
-            compBitmapData.fill(0, 0, 40);
+            var compBitmapData = that.game.make.bitmapData(that.back.width, that.compsMaxHeight);
+            //compBitmapData.fill(0, 0, 40);
             var compX = 0;
             var compY = heightAccu;
             var compBack = new Phaser.Image(that.game, compX, compY, compBitmapData);
@@ -205,9 +213,25 @@ function WindowList(game, bitmapData, align) {
 
             compBack.addChild(component);
 
-            heightAccu += compsMaxHeight;
+            heightAccu += that.compsMaxHeight;
         });
-        this.addChild(this.back);
+
+        // Drag and Inputs
+        this.back.inputEnabled = true;
+        this.back.input.priorityID = this.input.priorityID + 1;
+        this.back.input.allowHorizontalDrag = false;
+        this.back.input.enableDrag();
+        this.updateHitArea();
+        this.back.events.onDragStop.add(function(back, pointer){
+            this.updateHitArea();
+        }, this);
+
+        var listHeight = this.getListHeight();
+        var rectX = -this.getXOffset();
+        var rectY = -this.getYOffset() - (listHeight - this.back.height);
+        var rectWidth = this.back.width;
+        var rectHeight = listHeight;
+        this.back.input.boundsRect = new Phaser.Rectangle(rectX, rectY, rectWidth, rectHeight);
     };
 
     this.addVerticalScrollBar = function(){
@@ -218,6 +242,21 @@ function WindowList(game, bitmapData, align) {
         this.scrollbar = new Phaser.Image(this.game, scrollX, scrollY, scrollBitmapData);
         this.addChild(this.scrollbar);
     };
+
+    this.getListHeight = function(){
+        return this.back.children.length * this.compsMaxHeight;
+    }
+
+    
+    this.updateHitArea = function(){
+        this.back.hitArea = new Phaser.Rectangle(
+            0,
+            this.backMask.y - this.back.y,
+            this.back.width,
+            this.back.height
+        );
+    }
+    
 }
 WindowList.prototype = Object.create(Phaser.Image.prototype);
 WindowList.prototype.constructor = WindowList;
