@@ -99,7 +99,7 @@ function Window(game, x, y, width, height, texture, group, arrangement, draggabl
 
     this.addVerticalListComponent = function (compList, align, col, row){
         var listBack = this.game.make.bitmapData(this.getUsableWidth(), this.getUsableHeight() - 100);
-        //listBack.fill(0, 0, 0);
+        listBack.fill(0, 0, 0);
         var listComp = new WindowList(this.game, listBack, this.getAlignment(align));
         //listComp.alpha = 0.2;
         this._addComponent(listComp, col, row);
@@ -186,8 +186,7 @@ function WindowList(game, bitmapData, align) {
     };
 
     this.addVerticalCompList = function(compList){
-        var backBitmapData = this.game.make.bitmapData(this.width - 30, this.height);
-        //backBitmapData.fill(40, 40, 40);
+        var backBitmapData = this.game.make.bitmapData(this.width - 15, this.height);
         var backX = -this.getXOffset();
         var backy = -this.getYOffset();
         this.back = new Phaser.Image(this.game, backX, backy, backBitmapData);
@@ -205,7 +204,7 @@ function WindowList(game, bitmapData, align) {
         var that = this;
         compList.forEach(function(component){
             var compBitmapData = that.game.make.bitmapData(that.back.width, that.compsMaxHeight);
-            //compBitmapData.fill(0, 0, 40);
+            compBitmapData.fill(0, 0, 40);
             var compX = 0;
             var compY = heightAccu;
             var compBack = new Phaser.Image(that.game, compX, compY, compBitmapData);
@@ -221,6 +220,7 @@ function WindowList(game, bitmapData, align) {
         this.back.input.priorityID = this.input.priorityID + 1;
         this.back.input.allowHorizontalDrag = false;
         this.back.input.enableDrag();
+
         this.updateHitArea();
         this.back.events.onDragStop.add(function(back, pointer){
             this.updateHitArea();
@@ -235,9 +235,11 @@ function WindowList(game, bitmapData, align) {
     };
 
     this.addVerticalScrollBar = function(){
-        var scrollBitmapData = this.game.make.bitmapData(12, this.height);
+        
+        
+        var scrollBitmapData = this.game.make.bitmapData(15, this.height);
         scrollBitmapData.fill(30, 30, 30);
-        var scrollX = this.width - 20 - this.getXOffset();
+        var scrollX = this.width - 15 - this.getXOffset();
         var scrollY = -this.getYOffset();
         this.scrollbar = new Phaser.Image(this.game, scrollX, scrollY, scrollBitmapData);
         this.addChild(this.scrollbar);
